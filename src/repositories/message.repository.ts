@@ -50,18 +50,28 @@ export class MessageRepository {
     return this.client.request.message.getAttachment({ url });
   }
 
+  uploadAttachmentMetadata({ 
+    filename, 
+    fileSize 
+  }: { 
+    filename: string, 
+    fileSize: number 
+  }): Promise<unknown> {
+    return this.client.request.message.uploadAttachmentMetadata({ filename, fileSize });
+  }
+
   uploadAttachment({ 
     file,
+    uploadUrl,
     fileSize,
-    filename,
     mimetype
   }: {
     file: any,
+    uploadUrl: string,
     fileSize: number,
-    filename: string,
     mimetype: string
   }): Promise<unknown> {
-    return this.client.request.message.uploadAttachment({ file, fileSize, filename, mimetype })
+    return this.client.request.message.uploadAttachment({ file, uploadUrl, fileSize, mimetype });
   }
 
   private async fetchMessages({

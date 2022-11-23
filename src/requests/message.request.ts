@@ -95,16 +95,12 @@ export class MessageRequest {
     });
   }
 
-  async uploadAttachment({ 
-    file,
-    fileSize,
-    filename,
-    mimetype
-  }: {
-    file: any,
-    fileSize: number, 
-    filename: string,
-    mimetype: string
+  async uploadAttachmentMetadata({ 
+    filename, 
+    fileSize 
+  }: { 
+    filename: string, 
+    fileSize: number 
   }): Promise<unknown> {
     const url = "/voyager/api/voyagerVideoDashMediaUploadMetadata";
     const uploadMetadataResponse = await this.request.post<any>(url, {
@@ -115,24 +111,28 @@ export class MessageRequest {
       params: { action: "upload" }
     });
 
-    const {
-      urn: mediaUrn,
-      singleUploadUrl: uploadUrl,
-    } = uploadMetadataResponse.value as any;
+    const { urn, singleUploadUrl: uploadUrl } = uploadMetadataResponse.value as any;
 
+    return { urn, uploadUrl };
+  }
+
+  async uploadAttachment({
+    file,
+    uploadUrl,
+    fileSize,
+    mimetype
+  }: {
+    file: any,
+    uploadUrl: string,
+    fileSize: number, 
+    mimetype: string
+  }): Promise<unknown> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await this.request.put(uploadUrl, file as any, {
+    return this.request.put(uploadUrl, file as any, {
       headers: {
         "content-type": mimetype,
         "content-length": fileSize,
       }
     });
-
-    return {
-      urn: mediaUrn,
-      filename,
-      fileSize,
-      mimetype,
-    };
   }
 }
