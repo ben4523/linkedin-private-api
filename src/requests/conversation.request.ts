@@ -13,19 +13,26 @@ export class ConversationRequest {
     this.request = request;
   }
 
-  markConversationAsRead({ conversationId }: { 
-      conversationId: ConversationId 
-    }): Promise<void> {
+  markConversationAsRead({ conversationId, entityUrn }: {
+    conversationId: ConversationId;
+    entityUrn: string;
+  }): Promise<void> {
+    
+    const entity = `urn:li:msg_conversation:(urn:li:fsd_profile:${entityUrn},${conversationId})`;
 
     const requestPayload = {
-      "patch": {
-        "$set": {
-          "read": true
+      "entities": {
+        [entity]: {
+          "patch": {
+            "$set": {
+              "read": true
+            }
+          }
         }
       }
     };
 
-    return this.request.post(`messaging/conversations/${conversationId}`, requestPayload);
+    return this.request.post(`voyagerMessagingDashMessengerConversations?ids=List(${entity})`, requestPayload);
   }
 
   getConversation({ conversationId }: { conversationId: ConversationId }): Promise<GetConversationResponse> {
