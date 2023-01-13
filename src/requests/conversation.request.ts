@@ -32,7 +32,7 @@ export class ConversationRequest {
       }
     };
 
-    var encodedEntity = encodeURIComponent(entity);
+    var encodedEntity = encodeURIComponent(entity).replace('(', '%28').replace(')', '%29');
     return this.request.post(`voyagerMessagingDashMessengerConversations?ids=List(${encodedEntity})`, requestPayload);
   }
 
