@@ -13,16 +13,13 @@ export class ConversationRequest {
     this.request = request;
   }
 
-  markConversationAsRead({ conversationId, entityUrn }: {
-    conversationId: ConversationId;
-    entityUrn: string;
+  markConversationAsRead({ sdkEntityUrn }: {
+    sdkEntityUrn: string;
   }): Promise<void> {
-
-    const entity = `urn:li:msg_conversation:(urn:li:fsd_profile:${entityUrn},${conversationId})`;
 
     const requestPayload = {
       "entities": {
-        [entity]: {
+        [sdkEntityUrn]: {
           "patch": {
             "$set": {
               "read": true
@@ -32,7 +29,7 @@ export class ConversationRequest {
       }
     };
 
-    var encodedEntity = encodeURIComponent(entity).replace('(', '%28').replace(')', '%29');
+    var encodedEntity = encodeURIComponent(sdkEntityUrn).replace('(', '%28').replace(')', '%29');
     return this.request.post(`voyagerMessagingDashMessengerConversations?ids=List(${encodedEntity})`, requestPayload);
   }
 

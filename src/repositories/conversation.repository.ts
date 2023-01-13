@@ -39,11 +39,10 @@ export class ConversationRepository {
     this.client = client;
   }
 
-  async markConversationAsRead({ conversationId, entityUrn }: {
-    conversationId: ConversationId;
-    entityUrn: string;
+  async markConversationAsRead({ sdkEntityUrn }: {
+    sdkEntityUrn: string;
   }): Promise<void> {
-    return this.client.request.conversation.markConversationAsRead({ conversationId, entityUrn });
+    return this.client.request.conversation.markConversationAsRead({ sdkEntityUrn });
   }
 
   async getConversation({ conversationId }: { conversationId: ConversationId }): Promise<Conversation> {
