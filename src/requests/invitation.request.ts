@@ -1,5 +1,3 @@
-import { forEach } from 'lodash';
-import { func } from 'testdouble';
 import { LinkedInRequest } from '../core/linkedin-request';
 import { GetReceivedInvitationResponse } from '../responses/received-invitations.response.get';
 import { GetSentInvitationResponse } from '../responses/sent-invitations.response.get';
@@ -12,11 +10,11 @@ export class InvitationRequest {
     this.request = request;
   }
 
-  public randomTransactionId() {
-    var result = [];
+  public randomTransactionId(): string {
+    const result = [];
 
     let strLength = 22;
-    let charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     while (strLength--) {
       result.push(charSet.charAt(Math.floor(Math.random() * charSet.length)));
@@ -25,88 +23,71 @@ export class InvitationRequest {
     return result.join('') + '==';
   }
 
-  sendEmailsInvitations({
-    emailsByComma,
-    message }:
-    {
-      emailsByComma: string;
-      message?: string
-    }): Promise<void> {
-
-    var emailsAsArray = emailsByComma.split(",");
-    let invitations = [];
+  sendEmailsInvitations({ emailsByComma, message }: { emailsByComma: string; message?: string }): Promise<void> {
+    const emailsAsArray = emailsByComma.split(',');
+    const invitations = [];
 
     for (let i = 0; i < emailsAsArray.length; i++) {
-      let email = emailsAsArray[i];
-      let trackingId = this.randomTransactionId();
+      const email = emailsAsArray[i];
+      const trackingId = this.randomTransactionId();
 
-      let invitation = {
+      const invitation = {
         emberEntityName: 'growth/invitation/norm-invitation',
         invitee: {
           'com.linkedin.voyager.growth.invitation.InviteeEmail': {
-            email
-          }
+            email,
+          },
         },
         trackingId,
-        message
+        message,
       };
 
       invitations.push(invitation);
     }
 
-    let defaultCountryCode = "ca";
-    let uploadTransactionId = this.randomTransactionId();
+    const defaultCountryCode = 'ca';
+    const uploadTransactionId = this.randomTransactionId();
 
     const requestPayload = {
       invitations,
       uploadTransactionId,
-      defaultCountryCode
+      defaultCountryCode,
     };
 
     return this.request.post('growth/normInvitations?action=batchCreate', requestPayload);
   }
 
-  sendNoLimitInvitation({
-    profileId,
-    message }:
-    {
-      profileId: string;
-      message?: string
-    }): Promise<void> {
+  sendNoLimitInvitation({ profileId, message }: { profileId: string; message?: string }): Promise<void> {
+    const invitations = [];
+    const trackingId = this.randomTransactionId();
+    const uploadTransactionId = this.randomTransactionId();
 
-    let invitations = [];
-    let trackingId = this.randomTransactionId();
-    let uploadTransactionId = this.randomTransactionId();
-
-    let invitation = {
+    const invitation = {
       emberEntityName: 'growth/invitation/norm-invitation',
       invitee: {
         'com.linkedin.voyager.growth.invitation.InviteeProfile': {
-          profileId
-        }
+          profileId,
+        },
       },
       message,
-      trackingId
+      trackingId,
     };
 
     invitations.push(invitation);
 
     const requestPayload = {
       uploadTransactionId,
-      invitations
+      invitations,
     };
 
     return this.request.post('growth/normInvitations?action=batchCreate', requestPayload);
   }
 
-  sendInvitation({ profileId, message }: {
-    profileId: string;
-    message?: string
-  }): Promise<void> {
+  sendInvitation({ profileId, message }: { profileId: string; message?: string }): Promise<void> {
     profileId = extractProfileId(profileId);
 
     const requestPayload = {
-      trackingId : this.randomTransactionId(),
+      trackingId: this.randomTransactionId(),
       emberEntityName: 'growth/invitation/norm-invitation',
       invitee: {
         'com.linkedin.voyager.growth.invitation.InviteeProfile': {

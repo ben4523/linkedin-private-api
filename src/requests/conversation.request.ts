@@ -13,48 +13,45 @@ export class ConversationRequest {
     this.request = request;
   }
 
-  markConversationAsRead({ sdkEntityUrn }: {
-    sdkEntityUrn: string;
-  }): Promise<void> {
-
+  markConversationAsRead({ sdkEntityUrn }: { sdkEntityUrn: string }): Promise<void> {
     const requestPayload = {
-      "entities": {
+      entities: {
         [sdkEntityUrn]: {
-          "patch": {
-            "$set": {
-              "read": true
-            }
-          }
-        }
-      }
+          patch: {
+            $set: {
+              read: true,
+            },
+          },
+        },
+      },
     };
 
-    var encodedEntity = encodeURIComponent(sdkEntityUrn).replace('(', '%28').replace(')', '%29');
+    const encodedEntity = encodeURIComponent(sdkEntityUrn).replace('(', '%28').replace(')', '%29');
     return this.request.post(`voyagerMessagingDashMessengerConversations?ids=List(${encodedEntity})`, requestPayload);
   }
 
-getConversation({ conversationId }: { conversationId: ConversationId }): Promise < GetConversationResponse > {
-  return this.request.get<GetConversationResponse>(`messaging/conversations/${conversationId}`);
-}
+  getConversation({ conversationId }: { conversationId: ConversationId }): Promise<GetConversationResponse> {
+    return this.request.get<GetConversationResponse>(`messaging/conversations/${conversationId}`);
+  }
 
-getConversations({
-  recipients,
-  createdBefore,
-  unread
-}: {
-  recipients?: ProfileId | ProfileId[];
-  createdBefore?: Date;
-  unread?: boolean;
-}): Promise < GetConversationsResponse > {
-  const queryParams = {
-    ...(recipients && { q: 'participants', recipients: castArray(recipients) }),
-    ...(createdBefore && { createdBefore: createdBefore.getTime() }),
-    ...(unread && { filters: castArray('UNREAD') }),
-    ...(unread && { q: 'search' })
-  };
+  getConversations({
+    recipients,
+    createdBefore,
+    unread,
+  }: {
+    recipients?: ProfileId | ProfileId[];
+    createdBefore?: Date;
+    unread?: boolean;
+  }): Promise<GetConversationsResponse> {
+    const queryParams = {
+      ...(recipients && { q: 'participants', recipients: castArray(recipients) }),
+      ...(createdBefore && { createdBefore: createdBefore.getTime() }),
+      ...(unread && { filters: castArray('UNREAD') }),
+      ...(unread && { q: 'search' }),
+    };
 
-  return this.request.get<GetConversationsResponse>('messaging/conversations', {
-    params: queryParams,
-  });
-}
+    return this.request.get<GetConversationsResponse>('messaging/conversations', {
+      params: queryParams,
+    });
+  }
 }

@@ -21,7 +21,7 @@
 
 •  **emailAddress**: string
 
-*Defined in [src/entities/linkedin-contact-info-response.entity.ts:9](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/entities/linkedin-contact-info-response.entity.ts#L9)*
+*Defined in [src/entities/linkedin-contact-info-response.entity.ts:9](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/entities/linkedin-contact-info-response.entity.ts#L9)*
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 •  **phoneNumbers**: [PhoneNumber](_src_entities_linkedin_contact_info_response_entity_.phonenumber.md)[]
 
-*Defined in [src/entities/linkedin-contact-info-response.entity.ts:8](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/entities/linkedin-contact-info-response.entity.ts#L8)*
+*Defined in [src/entities/linkedin-contact-info-response.entity.ts:8](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/entities/linkedin-contact-info-response.entity.ts#L8)*

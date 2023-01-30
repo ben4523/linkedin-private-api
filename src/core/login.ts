@@ -2,9 +2,10 @@ import { parse as parseCookie } from 'cookie';
 import * as fs from 'fs/promises';
 import { merge, pickBy, reduce } from 'lodash';
 
-import { requestHeaders } from '../../config';
+import { requestHeaders, linkedinSalesNavigatorUrl } from '../../config';
 import { AnonymousCookies } from '../types/anonymous-cookies';
-import { AuthCookies } from '../types/auth-cookies';
+import { AuthCookies, AuthSalesNavCookies } from '../types/auth-cookies';
+import { SalesApiIdentity } from '../types/sales-navigator';
 import { Client } from './client';
 
 const SESSIONS_PATH = `${process.cwd()}/sessions.json`;
@@ -35,7 +36,9 @@ export class Login {
     });
   }
 
-  private async readCacheFile(): Promise<Record<string, AuthCookies>> {
+  private async readCacheFile(cacheObject?: Record<string, AuthCookies>): Promise<Record<string, AuthCookies>> {
+    if (cacheObject) return cacheObject;
+
     let cachedSessions: Record<string, AuthCookies>;
 
     try {
@@ -76,16 +79,42 @@ export class Login {
     return false;
   }
 
+  private async initSalesNav(): Promise<AuthSalesNavCookies> {
+    const salesApiIdentity = await this.client.request.get<SalesApiIdentity>(
+      `${linkedinSalesNavigatorUrl}/salesApiIdentity?q=findLicensesByCurrentMember&includeRecentlyInactiveDueToOverallocation=true`,
+    );
+
+    const salesApiAgnosticAuthentication = await this.client.request.post(
+      `${linkedinSalesNavigatorUrl}/salesApiAgnosticAuthentication`,
+      {
+        viewerDeviceType: 'DESKTOP',
+        identity: {
+          name: 'Sales Navigator Core',
+          agnosticIdentity: salesApiIdentity.elements[0].agnosticIdentity,
+        },
+      },
+      { fullResponse: true },
+    );
+
+    const parsedCookies = parseCookies<AuthSalesNavCookies>(salesApiAgnosticAuthentication.headers['set-cookie']);
+
+    return parsedCookies;
+  }
+
   async userPass({
     username,
     password,
     useCache = true,
+    saleNav = false,
+    cacheObject,
   }: {
     username: string;
     password?: string;
     useCache?: boolean;
+    saleNav?: boolean;
+    cacheObject?: Record<string, AuthCookies>;
   }): Promise<Client> {
-    const cachedSessions = await this.readCacheFile();
+    const cachedSessions = await this.readCacheFile(cacheObject);
 
     if (this.tryCacheLogin({ useCache, cachedSessions, username })) {
       return this.client;
@@ -101,9 +130,15 @@ export class Login {
 
     const authRes = await this.client.request.auth.authenticateUser({ username, password, sessionId });
 
-    const parsedCookies = parseCookies<AuthCookies>(authRes.headers['set-cookie']);
-    fs.writeFile(SESSIONS_PATH, JSON.stringify({ ...cachedSessions, [username]: parsedCookies }));
+    let parsedCookies = parseCookies<AuthCookies>(authRes.headers['set-cookie']);
 
+    if (saleNav) {
+      const salesNavCookies = await this.initSalesNav();
+
+      parsedCookies = { ...parsedCookies, ...salesNavCookies };
+    }
+
+    fs.writeFile(SESSIONS_PATH, JSON.stringify({ ...cachedSessions, [username]: parsedCookies }));
     this.setRequestHeaders({ cookies: parsedCookies });
 
     return this.client;
@@ -113,20 +148,28 @@ export class Login {
     username,
     cookies,
     useCache = true,
+    saleNav = false,
+    cacheObject,
   }: {
     username?: string;
-    cookies: { JSESSIONID: string; li_at?: string } | string;
+    cookies: { JSESSIONID: string; li_at?: string; li_a?: string } | string;
     useCache?: boolean;
+    saleNav?: boolean;
+    cacheObject?: Record<string, AuthCookies>;
   }): Promise<Client> {
-    const cachedSessions = await this.readCacheFile();
+    const cachedSessions = await this.readCacheFile(cacheObject);
 
     if (this.tryCacheLogin({ useCache, cachedSessions, username })) {
       return this.client;
     }
 
-    const parsedCookies = typeof (cookies) === 'string'
-      ? parseCookies<AuthCookies>(cookies.split(';'))
-      : cookies;
+    let parsedCookies = typeof cookies === 'string' ? parseCookies<AuthCookies>(cookies.split(';')) : cookies;
+
+    if (saleNav) {
+      const salesNavCookies = await this.initSalesNav();
+
+      parsedCookies = { ...parsedCookies, ...salesNavCookies };
+    }
 
     this.setRequestHeaders({ cookies: parsedCookies });
 

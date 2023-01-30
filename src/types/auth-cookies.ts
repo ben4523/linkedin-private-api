@@ -11,3 +11,9 @@ export interface AuthCookies {
   recent_history?: string;
   wwepo?: string;
 }
+
+export interface AuthSalesNavCookies {
+  bcookie?: string;
+  bscookie?: string;
+  li_a?: string;
+}

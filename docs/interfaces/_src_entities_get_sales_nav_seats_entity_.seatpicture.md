@@ -20,4 +20,4 @@
 
 •  **vectorImage**: [VectorImage](_src_entities_get_sales_nav_seats_entity_.vectorimage.md)
 
-*Defined in [src/entities/get-sales-nav-seats.entity.ts:13](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/entities/get-sales-nav-seats.entity.ts#L13)*
+*Defined in [src/entities/get-sales-nav-seats.entity.ts:13](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/entities/get-sales-nav-seats.entity.ts#L13)*

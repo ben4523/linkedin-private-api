@@ -18,12 +18,11 @@ export class Request {
   request: AxiosInstance;
 
   constructor({ proxy }: RequestOpts = {}) {
-
-    const userAndPass =  proxy!.auth!.username+':'+proxy!.auth!.password;
+    const userAndPass = proxy!.auth!.username + ':' + proxy!.auth!.password;
     const httpsAgent = HttpsProxyAgent({
       host: proxy!.host,
-      port:proxy!.port,
-      auth:userAndPass
+      port: proxy!.port,
+      auth: userAndPass,
     });
 
     this.request = axios.create({
@@ -38,7 +37,7 @@ export class Request {
   }
 
   updateHeaders(headers: Record<string, string>): void {
-    this.request.defaults.headers = {...this.request.defaults.headers, ...headers};
+    this.request.defaults.headers = { ...this.request.defaults.headers, ...headers };
   }
 
   getHeaders(): unknown {

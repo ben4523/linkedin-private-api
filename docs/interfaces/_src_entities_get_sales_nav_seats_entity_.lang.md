@@ -21,7 +21,7 @@
 
 •  **code**: string
 
-*Defined in [src/entities/get-sales-nav-seats.entity.ts:37](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/entities/get-sales-nav-seats.entity.ts#L37)*
+*Defined in [src/entities/get-sales-nav-seats.entity.ts:37](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/entities/get-sales-nav-seats.entity.ts#L37)*
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 •  **locale**: string
 
-*Defined in [src/entities/get-sales-nav-seats.entity.ts:36](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/entities/get-sales-nav-seats.entity.ts#L36)*
+*Defined in [src/entities/get-sales-nav-seats.entity.ts:36](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/entities/get-sales-nav-seats.entity.ts#L36)*

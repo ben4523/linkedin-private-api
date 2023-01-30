@@ -28,7 +28,7 @@
 
 \+ **new MessageRepository**(`__namedParameters`: { client: [Client](_src_core_client_.client.md)  }): [MessageRepository](_src_repositories_message_repository_.messagerepository.md)
 
-*Defined in [src/repositories/message.repository.ts:18](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/repositories/message.repository.ts#L18)*
+*Defined in [src/repositories/message.repository.ts:18](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/repositories/message.repository.ts#L18)*
 
 #### Parameters:
 
@@ -44,7 +44,7 @@ Name | Type |
 
 ▸ **getAttachment**(`__namedParameters`: { url: string  }): Promise<unknown\>
 
-*Defined in [src/repositories/message.repository.ts:49](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/repositories/message.repository.ts#L49)*
+*Defined in [src/repositories/message.repository.ts:49](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/repositories/message.repository.ts#L49)*
 
 #### Parameters:
 
@@ -60,7 +60,7 @@ ___
 
 ▸ **getMessages**(`__namedParameters`: { conversationId: string ; createdBefore: undefined \| Date  }): [MessageScroller](_src_scrollers_message_scroller_.messagescroller.md)
 
-*Defined in [src/repositories/message.repository.ts:24](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/repositories/message.repository.ts#L24)*
+*Defined in [src/repositories/message.repository.ts:24](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/repositories/message.repository.ts#L24)*
 
 #### Parameters:
 
@@ -76,7 +76,7 @@ ___
 
 ▸ **sendMessage**(`__namedParameters`: { attachments: any[] = []; conversationId: undefined \| string ; profileId: undefined \| string ; text: string  }): Promise<[MessageEventCreateResponse](../interfaces/_src_entities_message_create_response_entity_.messageeventcreateresponse.md)\>
 
-*Defined in [src/repositories/message.repository.ts:28](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/repositories/message.repository.ts#L28)*
+*Defined in [src/repositories/message.repository.ts:28](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/repositories/message.repository.ts#L28)*
 
 #### Parameters:
 
@@ -92,7 +92,7 @@ ___
 
 ▸ **uploadAttachment**(`__namedParameters`: { file: any ; fileSize: number ; mimetype: string ; uploadUrl: string  }): Promise<unknown\>
 
-*Defined in [src/repositories/message.repository.ts:63](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/repositories/message.repository.ts#L63)*
+*Defined in [src/repositories/message.repository.ts:63](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/repositories/message.repository.ts#L63)*
 
 #### Parameters:
 
@@ -108,7 +108,7 @@ ___
 
 ▸ **uploadAttachmentMetadata**(`__namedParameters`: { fileSize: number ; filename: string  }): Promise<unknown\>
 
-*Defined in [src/repositories/message.repository.ts:53](https://github.com/cosiall/linkedin-private-api/blob/7ebb094/src/repositories/message.repository.ts#L53)*
+*Defined in [src/repositories/message.repository.ts:53](https://github.com/cosiall/linkedin-private-api/blob/e4e3ce2/src/repositories/message.repository.ts#L53)*
 
 #### Parameters:
 
